@@ -1,0 +1,39 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<string> vec;
+
+void DFS(vector<vector<string>>& tickets,vector<bool>& visit, string become)
+{
+    for (int i = 0; i < tickets.size(); i++)
+    {
+        if (!visit[i] && become == tickets[i][0])
+        {
+            visit[i] = true;
+            DFS(tickets, visit, tickets[i][1]);
+            vec.push_back(tickets[i][1]);
+        }
+    }
+}
+
+bool Sort(vector<string> s1, vector<string> s2)
+{
+    return s1[1] < s2[1];
+}
+
+vector<string> solution(vector<vector<string>> tickets) {
+
+    vector<bool> visit(tickets.size(), false);
+
+    sort(tickets.begin(), tickets.end(), Sort);
+
+    DFS(tickets, visit, "ICN");
+    vec.push_back("ICN");
+
+    reverse(vec.begin(), vec.end());
+
+    return vec;
+}
