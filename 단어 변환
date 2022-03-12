@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int Count = 50;
+
+//변환할수 있는지 없는지
+bool CanTransform(string s1,string s2)
+{
+    int n = 0;
+    for (int i = 0; i < s1.size(); i++)
+    {
+        if (s1[i] != s2[i])
+            n++;
+    }
+
+    return n == 1;
+}
+
+void DFS(string start,string from, string target, vector<string>& words, vector<bool> b,int c)
+{
+    if (start == target)
+    {
+        if (Count > c)
+            Count = c;
+        return;
+    }
+
+    for (int i = 0; i < words.size(); i++)
+    {
+        if (CanTransform(start, words[i]) && !b[i])
+        {
+            b[i] = true;
+            DFS(words[i], start, target, words, b, c + 1);
+        }
+    }
+}
+
+int solution(string begin, string target, vector<string> words) {
+    int answer = 0;
+    vector<bool> b(words.size(), false);
+
+    if (find(words.begin(), words.end(), target) == words.end())
+        return 0;
+
+    DFS(begin, begin, target, words, b, 0);
+
+    answer = Count;
+    return answer;
+}
