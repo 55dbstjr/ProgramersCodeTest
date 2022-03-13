@@ -1,0 +1,32 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int D = 0;
+
+void DFS(vector<vector<int>> dungeons, vector<bool> visit, int now, int count)
+{
+    for (int i = 0; i < dungeons.size(); i++)
+    {
+        if (dungeons[i][0] <= now && !visit[i])
+        {
+            visit[i] = true;
+            DFS(dungeons, visit, now - dungeons[i][1], count + 1);
+            visit[i] = false;
+        }
+    }
+
+    if (count > D)
+        D = count;
+}
+
+int solution(int k, vector<vector<int>> dungeons) {
+    int answer = -1;
+
+    vector<bool> visit(dungeons.size(), false);
+    DFS(dungeons, visit, k, 0);
+
+    return D;
+}
