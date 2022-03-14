@@ -1,0 +1,70 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+
+using namespace std;
+
+long long F(long long a, long long b, char c)
+{
+    if (c == '+')
+        return a + b;
+    else if (c == '*')
+        return a * b;
+    else if (c == '-')
+        return a - b;
+}
+
+long long solution(string expression) {
+    long long answer = 0;
+    
+    vector<long long> vec_int;
+    vector<char> vec_char;
+    vector<char> oper = { '+','-','*' };
+
+
+    string str = "";
+
+    for (int i = 0; i < expression.size(); i++)
+    {
+        if (expression[i] == '*' || expression[i] == '+' || expression[i] == '-')
+        {
+            vec_int.push_back(stoi(str));
+            vec_char.push_back(expression[i]);
+            str = "";
+        }
+        else
+            str += expression[i];
+    }
+    vec_int.push_back(stoi(str));
+    
+    sort(oper.begin(), oper.end());
+
+    do
+    {
+        vector<long long> temp_num = vec_int;
+        vector<char> temp_char = vec_char;
+
+        for (int i = 0; i < oper.size(); i++)
+        {
+            for (int j = 0; j < temp_char.size(); j++)
+            {
+                if (temp_char[j] == oper[i])
+                {
+                    temp_num[j] = F(temp_num[j], temp_num[j + 1], oper[i]);
+                    temp_num.erase(temp_num.begin() + j + 1);
+                    temp_char.erase(temp_char.begin() + j);
+
+                    j--;
+                }
+            }
+        }
+
+        if (answer < abs(temp_num.front()))
+            answer = abs(temp_num.front());
+
+    } while (next_permutation(oper.begin(), oper.end()));
+
+    return answer;
+}
