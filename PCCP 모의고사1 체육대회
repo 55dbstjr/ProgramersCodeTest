@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int _max = 0, _player_Num, _game_Num;
+
+
+void dfs(vector<vector<int>>& ability, bool child[10], int game_count, int sum)
+{
+	if (game_count == _game_Num)
+	{
+		if (_max < sum)
+			_max = sum;
+		return;
+	}
+
+
+	for (int i = 0;i < _player_Num;i++)
+	{
+		if (child[i])
+			continue;
+		child[i] = true;
+		dfs(ability, child, game_count + 1, sum + ability[i][game_count]);
+		child[i] = false;
+	}
+	return;
+}
+
+int solution(vector<vector<int>> ability)
+{
+	_player_Num = ability.size();
+	_game_Num = ability[0].size();
+
+	bool child[10] = { false, };
+
+	dfs(ability, child, 0, 0);
+
+	return _max;
+}
