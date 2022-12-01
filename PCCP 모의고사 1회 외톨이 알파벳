@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+string solution(string input_string)
+{
+	vector<char> vec_NonGroup;
+
+	vec_NonGroup.push_back(input_string[0]);
+
+	for (int i = 1;i < input_string.length();i++)
+	{
+		//덩어리다!
+		if (input_string[i] == vec_NonGroup.back())
+			vec_NonGroup.pop_back();
+
+		vec_NonGroup.push_back(input_string[i]);
+	}
+
+	if (vec_NonGroup.size() == 0)
+		return "N";
+
+	string str = "";
+
+	for (int i = 0;i < vec_NonGroup.size() - 1;i++)
+	{
+		if (find(str.begin(), str.end(), vec_NonGroup[i]) != str.end())
+			continue;
+
+		for (int j = i + 1;j < vec_NonGroup.size();j++)
+		{
+			if (vec_NonGroup[i] == vec_NonGroup[j])
+			{
+				str += vec_NonGroup[i];
+				break;
+			}
+		}
+	}
+
+	if (str.length() == 0)
+		return "N";
+	sort(str.begin(), str.end());
+
+	return str;
+}
